@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 class TicTacToe
-  attr_reader :current_player, :winner, :board
+  attr_reader :current_player, :winner
 
   def initialize
     @board = Board.new
-    @current_player = "X"
+    @current_player = 'X'
     @finished = false
   end
 
   def play(move)
     return false unless (1..9).include? move
+
     move -= 1
     x = move / 3
     y = move % 3
@@ -26,21 +29,23 @@ class TicTacToe
       switch_player
     end
 
-    return true
+    true
   end
 
   def finished?
     @finished
   end
 
-  def display
-    @board.display
+  def to_s
+    @board.board.map do |row|
+      "#{row[0] || '-'}|#{row[1] || '-'}|#{row[2] || '-'}\n"
+    end.join
   end
 
   private
 
   def switch_player
-    @current_player = @current_player == "X" ? "O" : "X"
+    @current_player = @current_player == 'X' ? 'O' : 'X'
   end
 end
 
@@ -71,21 +76,18 @@ class Board
     ]
 
     lines.any? do |line|
-      one, two, three = [
-        @board[line[0][0]][line[0][1]],
-        @board[line[1][0]][line[1][1]],
-        @board[line[2][0]][line[2][1]]
-      ]
+      one = @board[line[0][0]][line[0][1]]
+      two = @board[line[1][0]][line[1][1]]
+      three = @board[line[2][0]][line[2][1]]
       one && one == two && two == three
     end
   end
 
-  def position_taken?(x, y)
-    @board[x][y]
+  def position_taken?(row, column)
+    @board[row][column]
   end
 
-  def move(x, y, player)
-    @board[x][y] = player
+  def move(row, column, player)
+    @board[row][column] = player
   end
 end
-
