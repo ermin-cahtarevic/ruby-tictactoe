@@ -35,3 +35,13 @@ For example, the following board shows a vertical line winning move for the play
     X|O|
     -+-+-
     X| |O
+
+
+## Technologies used
+
+Ruby.
+
+## Contributors
+
+Eleazar Meza - [GitHub](https://github.com/elshaka)
+Ermin Cahtarevic - [GitHub](https://github.com/ermin-cahtarevic)
