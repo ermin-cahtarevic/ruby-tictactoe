@@ -1,40 +1,17 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-def valid_move?(move)
-  (1..9).include? move
-end
+# !/usr/bin/env ruby
 
-def winning_move?
-  rand > 0.7
-end
+require_relative '../lib/tic_tac_toe'
 
-def draw_move?
-  rand > 0.7
-end
+game = TicTacToe.new
 
-def display_board
-  puts "Game board is displayed"
-end
-
-current_player = 'X'
-
-display_board
-
-while true
-  print "Player #{current_player}, your next move choose a number (1-9)?: "
+until game.finished?
+  puts game.to_s
+  print "Player #{game.current_player}, your next move choose a number (1-9)?: "
   move = gets.chomp.to_i
-  if valid_move?(move)
-    display_board
-    if winning_move?
-      puts "Player #{current_player} has won the game!"
-      break
-    elsif draw_move?
-      puts "Game ended in a draw"
-      break
-    else
-      current_player = current_player == "X" ? "O" : "X"
-    end
-  else
-    puts "Invalid move!"
-  end
+  puts 'Invalid move' unless game.play(move)
 end
+
+puts game.to_s
+puts game.winner ? "The winner is #{game.winner}" : 'Game ended in a draw'
