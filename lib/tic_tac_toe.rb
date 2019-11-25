@@ -1,11 +1,5 @@
-#0   1   2
-#|   |   |
-#1 | 2 | 3 -- 0
-#4 | 5 | 6 -- 1
-#7 | 8 | 9 -- 2
-
 class TicTacToe
-  attr_reader :current_player, :winner
+  attr_reader :current_player, :winner, :board
 
   def initialize
     @board = Board.new
@@ -19,13 +13,18 @@ class TicTacToe
     x = move / 3
     y = move % 3
 
-    return false if @board.board[x][y]
+    return false if @board.position_taken?(x, y)
 
-    @board.board[x][y] = @current_player
+    @board.move(x, y, @current_player)
 
-    check_board
-
-    @current_player = @current_player == "X" ? "O" : "X" unless @finished
+    if @board.victory?
+      @winner = @current_player
+      @finished = true
+    elsif @board.full?
+      @finished = true
+    else
+      switch_player
+    end
 
     return true
   end
@@ -40,7 +39,26 @@ class TicTacToe
 
   private
 
-  def check_board
+  def switch_player
+    @current_player = @current_player == "X" ? "O" : "X"
+  end
+end
+
+class Board
+  attr_reader :board
+  def initialize
+    @board = [
+      [nil, nil, nil],
+      [nil, nil, nil],
+      [nil, nil, nil]
+    ]
+  end
+
+  def full?
+    @board.flatten.all?
+  end
+
+  def victory?
     lines = [
       [[0, 0], [0, 1], [0, 2]],
       [[1, 0], [1, 1], [1, 2]],
@@ -52,29 +70,22 @@ class TicTacToe
       [[2, 0], [1, 1], [0, 2]]
     ]
 
-    if lines.any? { |line| @board.board[line[0][0]][line[0][1]] == @board.board[line[1][0]][line[1][1]] && @board.board[line[1][0]][line[1][1]] == @board.board[line[2][0]][line[2][1]] }
-      @finished = true
-      @winner = @current_player
-    elsif @board.board.flatten.all?
-      @finished = true
+    lines.any? do |line|
+      one, two, three = [
+        @board[line[0][0]][line[0][1]],
+        @board[line[1][0]][line[1][1]],
+        @board[line[2][0]][line[2][1]]
+      ]
+      one && one == two && two == three
     end
   end
-end
 
-class Board
-  attr_accessor :board
-  def initialize
-    @board = [
-      [nil, nil, nil],
-      [nil, nil, nil],
-      [nil, nil, nil]
-    ]
+  def position_taken?(x, y)
+    @board[x][y]
   end
 
-  def display
-    @board.each do |row|
-      puts "#{row[0] ? row[0] : '-'}|#{row[1] ? row[1] : '-'}|#{row[2] ? row[2] : '-'}"
-    end
+  def move(x, y, player)
+    @board[x][y] = player
   end
 end
 

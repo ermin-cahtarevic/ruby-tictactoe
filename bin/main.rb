@@ -12,4 +12,10 @@ while !game.finished?
 end
 
 game.display
-puts game.winner ? "The winner is X" : "Game ended in a draw"
+puts game.winner ? "The winner is #{game.winner}" : "Game ended in a draw"
+
+def display
+  @board.each do |row|
+    puts "#{row[0] ? row[0] : '-'}|#{row[1] ? row[1] : '-'}|#{row[2] ? row[2] : '-'}"
+  end
+end
