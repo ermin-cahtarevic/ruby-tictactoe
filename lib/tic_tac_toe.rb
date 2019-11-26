@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TicTacToe
-  attr_reader :current_player, :winner
+  attr_reader :current_player, :winner, :finished
 
   def initialize
     @board = Board.new
@@ -30,10 +30,6 @@ class TicTacToe
     end
 
     true
-  end
-
-  def finished?
-    @finished
   end
 
   def to_s
@@ -84,7 +80,7 @@ class Board
   end
 
   def position_taken?(row, column)
-    @board[row][column]
+    !@board[row][column].nil?
   end
 
   def move(row, column, player)
