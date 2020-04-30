@@ -9,6 +9,10 @@ To run the game make sure to give execute permission to the main.rb
 After that you can start the game by running
 
     ./bin/main.rb
+    
+Run tests 
+
+    rspec
 
 ## Instructions
 
